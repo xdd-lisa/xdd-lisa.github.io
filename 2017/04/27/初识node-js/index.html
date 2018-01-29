@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="node," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Web应用 请求 （浏览器） 处理 响应  浏览器和服务器的通信过程 在浏览器中输入域名 查找域名对应的ip地址（1. 浏览器的dns缓存 2.hosts文件 3. DNS服务器） 向ip对应的服务器发送请求 服务器接收到请求 服务器根据请求报文体中的内容，处理请求 服务器向浏览器发送响应报文  浏览器的工作原理浏览器组成部分 用户交互部分（UI） JavaScript引擎 （V8） HTML,C">
+<meta name="keywords" content="node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识node.js">
+<meta property="og:url" content="http://yoursite.com/2017/04/27/初识node-js/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Web应用 请求 （浏览器） 处理 响应  浏览器和服务器的通信过程 在浏览器中输入域名 查找域名对应的ip地址（1. 浏览器的dns缓存 2.hosts文件 3. DNS服务器） 向ip对应的服务器发送请求 服务器接收到请求 服务器根据请求报文体中的内容，处理请求 服务器向浏览器发送响应报文  浏览器的工作原理浏览器组成部分 用户交互部分（UI） JavaScript引擎 （V8） HTML,C">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-27T13:55:53.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识node.js">
+<meta name="twitter:description" content="Web应用 请求 （浏览器） 处理 响应  浏览器和服务器的通信过程 在浏览器中输入域名 查找域名对应的ip地址（1. 浏览器的dns缓存 2.hosts文件 3. DNS服务器） 向ip对应的服务器发送请求 服务器接收到请求 服务器根据请求报文体中的内容，处理请求 服务器向浏览器发送响应报文  浏览器的工作原理浏览器组成部分 用户交互部分（UI） JavaScript引擎 （V8） HTML,C">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/27/初识node-js/"/>
+
+
+
+
+
+  <title>初识node.js | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/27/初识node-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lisa">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">初识node.js</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T21:54:46+08:00">
+                2017-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/框架/" itemprop="url" rel="index">
+                    <span itemprop="name">框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Web应用"><a href="#Web应用" class="headerlink" title="Web应用"></a>Web应用</h2><ol>
+<li>请求 （浏览器）</li>
+<li>处理</li>
+<li>响应</li>
+</ol>
+<h2 id="浏览器和服务器的通信过程"><a href="#浏览器和服务器的通信过程" class="headerlink" title="浏览器和服务器的通信过程"></a>浏览器和服务器的通信过程</h2><ol>
+<li>在浏览器中输入域名</li>
+<li>查找域名对应的ip地址（1. 浏览器的dns缓存 2.hosts文件 3. DNS服务器）</li>
+<li>向ip对应的服务器发送请求</li>
+<li>服务器接收到请求</li>
+<li>服务器根据请求报文体中的内容，处理请求</li>
+<li>服务器向浏览器发送响应报文</li>
+</ol>
+<h2 id="浏览器的工作原理"><a href="#浏览器的工作原理" class="headerlink" title="浏览器的工作原理"></a>浏览器的工作原理</h2><h3 id="浏览器组成部分"><a href="#浏览器组成部分" class="headerlink" title="浏览器组成部分"></a>浏览器组成部分</h3><ol>
+<li>用户交互部分（UI）</li>
+<li>JavaScript引擎 （V8）</li>
+<li>HTML,CSS渲染引擎（浏览器内核）</li>
+<li>网络（Socket）</li>
+<li>数据存储（cookie, sessionStorage, localStorage）</li>
+</ol>
+<h3 id="浏览器工作原理"><a href="#浏览器工作原理" class="headerlink" title="浏览器工作原理"></a>浏览器工作原理</h3><ol>
+<li>解析html结构，生成dom树</li>
+<li>解析css生成样式规则</li>
+<li>将样式规则和dom树结合生成渲染树</li>
+<li>对渲染树进行layout或者reflow操作</li>
+<li>浏览器负责将渲染树绘制到页面中</li>
+</ol>
+<h3 id="node安装"><a href="#node安装" class="headerlink" title="node安装"></a>node安装</h3><p>直接去node官网，下载对应版本的安装包安装即可</p>
+<ol>
+<li>LTS 稳定版</li>
+<li>Current 最新版（包含好多新功能）</li>
+</ol>
+<h3 id="nvm"><a href="#nvm" class="headerlink" title="nvm"></a>nvm</h3><p>nvm是用来管理当前电脑上安装的不同版本的node</p>
+<p>windows下使用的 nvm-windows</p>
+<ol>
+<li>安装nvm（尽量不要安装在中文目录下）</li>
+<li>可以使用nvm来安装指定版本的node<br>nvm install latest<br>nvm install 指定的版本号<br>nvm uninstall 指定的版本号<br>nvm list<br>nvm use 指定的版本号<br>nvm version </li>
+</ol>
+<h2 id="Node的基本使用"><a href="#Node的基本使用" class="headerlink" title="Node的基本使用"></a>Node的基本使用</h2><h3 id="REPL"><a href="#REPL" class="headerlink" title="REPL"></a>REPL</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">read： 接收用户输入</div><div class="line">eval： 执行输入的代码</div><div class="line">print： 打印执行的结果</div><div class="line">loop： 从头开始继续接收输入</div><div class="line"></div><div class="line">平时我们使用浏览器中的控制台其实就是一个REPL，node也可以提供REPL。</div></pre></td></tr></table></figure>
+<h3 id="可以使用node来运行js文件中的代码"><a href="#可以使用node来运行js文件中的代码" class="headerlink" title="可以使用node来运行js文件中的代码"></a>可以使用node来运行js文件中的代码</h3><p>node js文件路径</p>
+<p>js文件命名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. 不能有中文</div><div class="line">2. 不能包含node关键字</div><div class="line">3. 不能有空格</div><div class="line">4. 单词之间用-分隔</div></pre></td></tr></table></figure>
+<h3 id="process-stdout-write"><a href="#process-stdout-write" class="headerlink" title="process.stdout.write"></a>process.stdout.write</h3><p>这个方法可以用来输出内容，而且不会自动换行<br>如果要换行可以加上\n</p>
+<h3 id="文件的读写"><a href="#文件的读写" class="headerlink" title="文件的读写"></a>文件的读写</h3><p>模块： fs</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>)</div><div class="line"></div><div class="line">fs.writeFile(<span class="string">"文件路径"</span>, <span class="string">"要写的内容"</span>, <span class="string">"编码格式"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">    <span class="keyword">if</span>(err)&#123;</div><div class="line"></div><div class="line">        <span class="keyword">throw</span> err;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"写入成功"</span>)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">"文件路径"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">    <span class="comment">//data是一个Buffer 字节数组</span></div><div class="line">    <span class="comment">//获取字符串，需要自己toString</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">fs.readFile(<span class="string">"文件路径"</span>, <span class="string">"utf-8"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">    <span class="comment">//data是一个字符串</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="dirname-filename-path-join"><a href="#dirname-filename-path-join" class="headerlink" title="dirname filename path.join"></a><strong>dirname </strong>filename path.join</h2><p><strong>dirname当前正在执行的js文件的文件夹路径
+</strong>filename当前正在执行的js文件的文件路径</p>
+<p>模块： path<br>path.join 可以用来拼接路径（比+方便）</p>
+<h2 id="创建服务器"><a href="#创建服务器" class="headerlink" title="创建服务器"></a>创建服务器</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1. 引入http模块</span></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>)</div><div class="line"></div><div class="line"><span class="comment">//2. 创建服务实例</span></div><div class="line"><span class="keyword">var</span> server = http.createServer();</div><div class="line"></div><div class="line"><span class="comment">//3. 注册请求事件 (每当有请求来的时候，这个事件就会被触发)</span></div><div class="line">server.on(<span class="string">"request"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>)</span>&#123;</div><div class="line">    <span class="comment">//request 请求信息</span></div><div class="line">    <span class="comment">//response 响应信息</span></div><div class="line"></div><div class="line">    <span class="comment">//给浏览器端返回数据（要给响应体中添加内容）</span></div><div class="line">    response.write(<span class="string">""</span>);</div><div class="line"></div><div class="line">    <span class="comment">//在所有的响应信息添加完毕之后，需要结束响应</span></div><div class="line">    response.end();</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//4. 开启服务实例的监听功能</span></div><div class="line">server.listen(端口号, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="comment">//监听开启成功后会执行的函数</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="事件循环（Event-Loop）"><a href="#事件循环（Event-Loop）" class="headerlink" title="事件循环（Event-Loop）"></a>事件循环（Event-Loop）</h2><p>事件循环会监视调用栈，以及回调队列<br>如果调用栈中为空，这个时候，就会将回调队列中的第一个元素放到调用栈中调用</p>
+<p>异步-非阻塞</p>
+<p>js是单线程的  异步的功能是由webapi或者nodeapi提供的！！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>朋友，发吗?</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Lisa 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Lisa 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node/" rel="tag"># node</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/24/offset系列/" rel="next" title="offset系列">
+                <i class="fa fa-chevron-left"></i> offset系列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/29/wechat/" rel="prev" title="wechat">
+                wechat <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Lisa" />
+            
+              <p class="site-author-name" itemprop="name">Lisa</p>
+              <p class="site-description motion-element" itemprop="description">真正的才智是刚毅的志向</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/xdd-lisa" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                    
+                      <i class="fa fa-fw fa-globe"></i>微博</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                    
+                      <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                    
+                      <i class="fa fa-fw fa-globe"></i>知乎</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web应用"><span class="nav-number">1.</span> <span class="nav-text">Web应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器和服务器的通信过程"><span class="nav-number">2.</span> <span class="nav-text">浏览器和服务器的通信过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器的工作原理"><span class="nav-number">3.</span> <span class="nav-text">浏览器的工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器组成部分"><span class="nav-number">3.1.</span> <span class="nav-text">浏览器组成部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器工作原理"><span class="nav-number">3.2.</span> <span class="nav-text">浏览器工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node安装"><span class="nav-number">3.3.</span> <span class="nav-text">node安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nvm"><span class="nav-number">3.4.</span> <span class="nav-text">nvm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node的基本使用"><span class="nav-number">4.</span> <span class="nav-text">Node的基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#REPL"><span class="nav-number">4.1.</span> <span class="nav-text">REPL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可以使用node来运行js文件中的代码"><span class="nav-number">4.2.</span> <span class="nav-text">可以使用node来运行js文件中的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-stdout-write"><span class="nav-number">4.3.</span> <span class="nav-text">process.stdout.write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的读写"><span class="nav-number">4.4.</span> <span class="nav-text">文件的读写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dirname-filename-path-join"><span class="nav-number">5.</span> <span class="nav-text">dirname filename path.join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建服务器"><span class="nav-number">6.</span> <span class="nav-text">创建服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件循环（Event-Loop）"><span class="nav-number">7.</span> <span class="nav-text">事件循环（Event-Loop）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lisa</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
