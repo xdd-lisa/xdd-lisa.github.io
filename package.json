@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "umi dev",
-    "build": "umi build && cp -r dist/ ./docs",
+    "build": "umi build && rm rf -r ./docs && cp -r dist/ ./docs",
     "postinstall": "umi setup",
     "start": "npm run dev"
   },
